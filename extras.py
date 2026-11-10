@@ -25,28 +25,26 @@
 
 print("=== SECURE LOGIN SYSTEM ===")
 
-# Challenge 1: Login attempts
+# ..............Challenge 1................
 attempts = 0
 login_success = False
 
 while attempts < 3 and not login_success:
 
-    # Input
     user = input("\nUsername: ")
     pw = input("Password: ")
     role = input("Role (admin/user): ")
     code = input("2FA code (or skip): ")
 
-    # Challenge 3: Password strength checker
+    # ............Challenge 3..........
     if len(pw) >= 8 and "!" in pw:
         print("Strong password")
     else:
         print("Weak password")
 
-    # Check admin login
     if user == "admin" and pw == "1235" and role == "admin":
 
-        # Challenge 2: Time-based admin access
+        #............. Challenge 2................
         hour = int(input("Enter hour (0-23): "))
 
         if hour >= 9 and hour <= 17:
@@ -68,7 +66,6 @@ while attempts < 3 and not login_success:
             print("Admin access is only allowed between 9:00 and 17:00")
             attempts += 1
 
-    # Check guest login
     elif user == "guest" and pw == "guest" and role == "user":
 
         if code == "9999" or code == "skip":
@@ -79,17 +76,14 @@ while attempts < 3 and not login_success:
             print("Incorrect 2FA code")
             attempts += 1
 
-    # Incorrect login details
+
     else:
         print("Access denied")
         attempts += 1
 
-    # Display remaining attempts
     if not login_success and attempts < 3:
         print("Attempts remaining:", 3 - attempts)
 
-
-# Lock account after 3 failed attempts
 if attempts >= 3:
     print("\nACCOUNT LOCKED!")
     print("Too many failed login attempts.")
