@@ -1,5 +1,3 @@
-
-
 ###PROJECT 2#####
 number = int(input("Please enter the number of Students: "))
 while number <= 0:
