@@ -102,14 +102,99 @@ def enter_score():
                 print("Invalid score! :( !!!")
                 score = float(input("Re-enter the student's score: "))
             scores.append(score)
-        students[student_id]["Scores"] = scores
+        students[student_id]["scores"] = scores
             
         print("Scores added successfully :) ")
     else:
         print("We don't have that ID in our systems. Sorry :( ")
             
-            
-            
+        
+def score_report():
+    if len(students) == 0:
+        print("No students available.")
+
+    else:
+        class_total = 0
+        number = 0
+
+        for student_id in students:
+
+            scores = students[student_id]["scores"]
+
+            if len(scores) == 3:
+
+                total = 0
+
+                for score in scores:
+                    total = total + score
+
+                average = total / 3
+
+                if average >= 80:
+                    grade = "A"
+                elif average >= 70:
+                    grade = "B"
+                elif average >= 60:
+                    grade = "C"
+                elif average >= 50:
+                    grade = "D"
+                else:
+                    grade = "F"
+
+                students[student_id]["total"] = total
+                students[student_id]["average"] = average
+                students[student_id]["grade"] = grade
+
+                class_total = class_total + average
+                number = number + 1
+
+        if number == 0:
+            print("No students have entered all three scores.")
+
+        else:
+
+            # Rank students by average
+            student_ids = []
+
+            for student_id in students:
+                if len(students[student_id]["scores"]) == 3:
+                    student_ids.append(student_id)
+
+            for i in range(len(student_ids)):
+                for j in range(i + 1, len(student_ids)):
+                    if students[student_ids[i]]["average"] < students[student_ids[j]]["average"]:
+                        student_ids[i], student_ids[j] = student_ids[j], student_ids[i]
+
+            # Display ranked results
+            print("\n========== RANKED STUDENT RESULTS ==========")
+            print("Rank | Name | Total | Average | Grade")
+
+            for i in range(len(student_ids)):
+                student_id = student_ids[i]
+
+                print(
+                    i + 1, "|",
+                    students[student_id]["name"], "|",
+                    students[student_id]["total"], "|",
+                    round(students[student_id]["average"], 2), "|",
+                    students[student_id]["grade"]
+                )
+
+            # Calculate class statistics
+            class_average = class_total / number
+
+            highest_total = students[student_ids[0]]["total"]
+
+            for student_id in student_ids:
+                if students[student_id]["total"] > highest_total:
+                    highest_total = students[student_id]["total"]
+
+            # Display statistics
+            print("\n========== CLASS STATISTICS ==========")
+            print("Number of students:", number)
+            print("Class average:", round(class_average, 2))
+            print("Highest student total:", highest_total)
+            print("Top student:", students[student_ids[0]]["name"])         
 choice = ""
 while choice != "0":
     print("\n ===== STUDENT MANAGAEMENT SYSTEM =====")
@@ -132,6 +217,8 @@ while choice != "0":
         delete_student()
     elif choice == "5":
         enter_score()
+    elif choice == "6":
+        score_report()
     elif choice == "0":
         print("Bye bye :) !!!")
     else:
